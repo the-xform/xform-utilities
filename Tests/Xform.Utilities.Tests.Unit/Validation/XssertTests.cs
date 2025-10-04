@@ -1,4 +1,5 @@
-﻿using XForm.Utilities.Validations;
+﻿using Microsoft.Extensions.FileProviders.Physical;
+using XForm.Utilities.Validations;
 
 namespace Xform.Utilities.Tests.Unit.Validation;
 
@@ -129,5 +130,47 @@ public class XssertTests
 		Assert.Throws<KeyNotFoundException>(() =>
 			Xssert.Contains(list, 99, "param", "list"));
 	}
+
+	#region - IFileInfo Tests -
+
+	[Fact]
+	public void AssertFileExists_ShouldNotThrow_WhenFileExists()
+	{
+		// Arrange
+		var tempFile = Path.GetTempFileName();
+		var fileInfo = new PhysicalFileInfo(new FileInfo(tempFile));
+
+		// Act & Assert
+		Xssert.FileExists(fileInfo, "tempFile");
+
+		// Cleanup
+		File.Delete(tempFile);
+	}
+
+	[Fact]
+	public void AssertFileExists_ShouldThrowArgumentNullException_WhenFileInfoIsNull()
+	{
+		// Act & Assert
+		var ex = Assert.Throws<ArgumentNullException>(() =>
+			Xssert.FileExists(null!, "fileParam"));
+
+		Assert.Contains("fileParam", ex.Message);
+	}
+
+	[Fact]
+	public void AssertFileExists_ShouldThrowFileNotFoundException_WhenFileDoesNotExist()
+	{
+		// Arrange
+		var fileInfo = new PhysicalFileInfo(new FileInfo(Path.Combine(Path.GetTempPath(), "nonexistent.txt")));
+
+		// Act & Assert
+		var ex = Assert.Throws<FileNotFoundException>(() =>
+			Xssert.FileExists(fileInfo, "fileParam"));
+
+		Assert.Contains("fileParam", ex.Message);
+	}
+
+	#endregion - IFileInfo Tests -
 }
+
 

@@ -4,6 +4,7 @@
 // See the LICENSE file in the project root for details.
 
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.FileProviders;
 
 namespace XForm.Utilities.Validations;
 
@@ -162,4 +163,23 @@ public static class Xssert
     }
 
 	#endregion - Generic -
+
+	#region - IFileInfo -
+
+	public static void FileExists(IFileInfo value,
+		string parameterName = "")
+	{
+		var fileInfo = value;
+		if (fileInfo == null)
+		{
+			throw new ArgumentNullException($"'{parameterName}' is null.");
+		}
+
+		if (fileInfo.Exists == false)
+		{
+			throw new FileNotFoundException($"File '{parameterName}' does not exist.");
+		}
+	}
+
+	#endregion - IFileInfo -
 }
