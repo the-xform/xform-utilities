@@ -1,14 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<FileVersion>1.0.0</FileVersion>
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <FileVersion>1.0.0</FileVersion>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Scheduling\Scheduling1.cs" />
-  </ItemGroup>
-
+		<!-- Nuget Settings -->
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>XForm.Utilities</PackageId>
+		<Version>1.0.0</Version>
+		<Authors>Rohit Ahuja</Authors>
+		<Company>The XForm</Company>
+		<Description>Easy to use validation extension, assertions (Xssert) for various .NET types, scheduling and location utilities, JSON utilities, that can help the developer focus on actual code without worrying to write validation code from scratch. </Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/the-xform/xform-utilities</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/the-xform/xform-utilities</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
 </Project>
