@@ -8,7 +8,7 @@
 		<!-- Nuget Settings -->
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>XForm.Utilities</PackageId>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<Authors>Rohit Ahuja</Authors>
 		<Company>The XForm</Company>
 		<Description>Easy to use validation extension, assertions (Xssert) for various .NET types, scheduling and location utilities, JSON utilities, that can help the developer focus on actual code without worrying to write validation code from scratch. </Description>
