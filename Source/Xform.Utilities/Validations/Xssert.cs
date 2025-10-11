@@ -109,7 +109,7 @@ public static class Xssert
 	{
 		if (value == null)
 		{
-			throw new ArgumentNullException($"Value eof '{parameterName}' cannot be null.");
+			throw new ArgumentNullException($"Value of '{parameterName}' cannot be null.");
 		}
 	}
 
