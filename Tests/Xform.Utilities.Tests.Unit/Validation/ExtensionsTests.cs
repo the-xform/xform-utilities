@@ -14,7 +14,20 @@ public class ExtensionsTests
 	[InlineData("IGNORE", false)]
 	public void HasSomething_String_Works(string? value, bool expected)
 	{
-		bool result = value.HasSomething(nameof(value), considerEmptyIf: "IGNORE");
+		bool result = value.HasSomething(considerEmptyIf: "IGNORE");
+		Assert.Equal(expected, result);
+	}
+
+	[Theory]
+	[InlineData(null, false)]
+	public void HasSomething_String_Works_And_Supresses_Compiler_Warning_Post_Call(string? value, bool expected)
+	{
+		if (value.HasSomething())
+		{
+			string notNullStr = value; // No warning here
+		}
+
+		bool result = value.HasSomething(value);
 		Assert.Equal(expected, result);
 	}
 
@@ -34,6 +47,8 @@ public class ExtensionsTests
 	[InlineData("#FFFFFF", true)]
 	[InlineData("#000", true)]
 	[InlineData("red", true)]
+	[InlineData("Green", true)]
+	[InlineData("bLuE", true)]
 	[InlineData("NotAColor", false)]
 	public void IsColorCode_Works(string value, bool expected)
 	{
@@ -50,27 +65,40 @@ public class ExtensionsTests
 		int? val1 = null;
 		int? val2 = 0;
 
-		Assert.False(val1.IsNotNullOrDefault("param"));
-		Assert.False(val2.IsNotNullOrDefault("param"));
+		Assert.False(val1.HasSomething());
+		Assert.False(val2.HasSomething());
 	}
 
 	[Fact]
 	public void IsNotNullOrDefault_Generic_ReturnsFalse_WhenConsiderDefaultIf()
 	{
 		int? val = 5;
-		Assert.False(val.IsNotNullOrDefault("param", 5));
+		Assert.False(val.HasSomething(5));
 	}
 
 	[Fact]
 	public void IsNotNullOrDefault_Generic_ReturnsTrue_WhenValid()
 	{
 		int? val = 10;
-		Assert.True(val.IsNotNullOrDefault("param"));
+		Assert.True(val.HasSomething());
 	}
 
 	#endregion
 
 	#region Guid
+
+	[Theory]
+	[InlineData(null, false)]
+	public void HasSomething_Guid_Works_And_Supresses_Compiler_Warning_Post_Call(Guid? value, bool expected)
+	{
+		if (value.HasSomething())
+		{
+			Guid notNullGuid = value.Value; // No warning here
+		}
+
+		bool result = value.HasSomething(value);
+		Assert.Equal(expected, result);
+	}
 
 	[Fact]
 	public void IsNotNullOrDefault_Guid_ReturnsFalse_WhenNullOrEmpty()
@@ -78,22 +106,22 @@ public class ExtensionsTests
 		Guid? g1 = null;
 		Guid? g2 = Guid.Empty;
 
-		Assert.False(g1.IsNotNullOrDefault("param"));
-		Assert.False(g2.IsNotNullOrDefault("param"));
+		Assert.False(g1.HasSomething<Guid>());
+		Assert.False(g2.HasSomething<Guid>());
 	}
 
 	[Fact]
 	public void IsNotNullOrDefault_Guid_RespectsConsiderDefaultIfEmpty()
 	{
 		Guid? g = Guid.Empty;
-		Assert.False(g.IsNotNullOrDefault("param", considerDefaultIfEmpty: true));
+		Assert.False(g.HasSomething<Guid>());
 	}
 
 	[Fact]
 	public void IsNotNullOrDefault_Guid_ReturnsTrue_WhenValid()
 	{
 		Guid? g = Guid.NewGuid();
-		Assert.True(g.IsNotNullOrDefault("param"));
+		Assert.True(g.HasSomething<Guid>());
 	}
 
 	[Theory]
@@ -109,14 +137,27 @@ public class ExtensionsTests
 
 	#region Numbers
 
+	[Theory]
+	[InlineData(null, false)]
+	public void HasSomething_Int_Works_And_Supresses_Compiler_Warning_Post_Call(int? value, bool expected)
+	{
+		if (value.HasSomething())
+		{
+			int notNullGuid = value.Value; // No warning here
+		}
+
+		bool result = value.HasSomething(value);
+		Assert.Equal(expected, result);
+	}
+
 	[Fact]
 	public void IsNotNull_Int_Works()
 	{
 		int? n1 = null;
 		int? n2 = 5;
 
-		Assert.False(n1.IsNotNull("param"));
-		Assert.True(n2.IsNotNull("param"));
+		Assert.False(n1.IsNotNull());
+		Assert.True(n2.IsNotNull());
 	}
 
 	[Fact]
@@ -126,10 +167,10 @@ public class ExtensionsTests
 		int? n2 = 0;
 		int? n3 = 5;
 
-		Assert.False(n1.IsNotNullOrDefault("param"));
-		Assert.False(n2.IsNotNullOrDefault("param"));
-		Assert.True(n3.IsNotNullOrDefault("param"));
-		Assert.False(n3.IsNotNullOrDefault("param", 5));
+		Assert.False(n1.HasSomething());
+		Assert.False(n2.HasSomething());
+		Assert.True(n3.HasSomething());
+		Assert.False(n3.HasSomething(5));
 	}
 
 	[Fact]
@@ -138,8 +179,8 @@ public class ExtensionsTests
 		decimal? d1 = null;
 		decimal? d2 = 1.23m;
 
-		Assert.False(d1.IsNotNull("param"));
-		Assert.True(d2.IsNotNull("param"));
+		Assert.False(d1.IsNotNull());
+		Assert.True(d2.IsNotNull());
 	}
 
 	[Fact]
@@ -149,10 +190,10 @@ public class ExtensionsTests
 		decimal? d2 = 0m;
 		decimal? d3 = 5m;
 
-		Assert.False(d1.IsNotNullOrDefault("param"));
-		Assert.False(d2.IsNotNullOrDefault("param"));
-		Assert.True(d3.IsNotNullOrDefault("param"));
-		Assert.False(d3.IsNotNullOrDefault("param", 5m));
+		Assert.False(d1.HasSomething());
+		Assert.False(d2.HasSomething());
+		Assert.True(d3.HasSomething());
+		Assert.False(d3.HasSomething(5m));
 	}
 
 	[Fact]
@@ -161,8 +202,8 @@ public class ExtensionsTests
 		double? d1 = null;
 		double? d2 = 2.5;
 
-		Assert.False(d1.IsNotNull("param"));
-		Assert.True(d2.IsNotNull("param"));
+		Assert.False(d1.IsNotNull());
+		Assert.True(d2.IsNotNull());
 	}
 
 	[Fact]
@@ -172,10 +213,10 @@ public class ExtensionsTests
 		double? d2 = 0d;
 		double? d3 = 5d;
 
-		Assert.False(d1.IsNotNullOrDefault("param"));
-		Assert.False(d2.IsNotNullOrDefault("param"));
-		Assert.True(d3.IsNotNullOrDefault("param"));
-		Assert.False(d3.IsNotNullOrDefault("param", 5d));
+		Assert.False(d1.HasSomething());
+		Assert.False(d2.HasSomething());
+		Assert.True(d3.HasSomething());
+		Assert.False(d3.HasSomething(5d));
 	}
 
 	#endregion
@@ -245,7 +286,7 @@ public class ExtensionsTests
 		var list2 = new List<int>();
 		var list3 = new List<int> { 1, 2 };
 
-		Assert.True(list1.HasSomething());   // Null but returns true by design
+		Assert.False(list1.HasSomething());   // Null but returns true by design
 		Assert.False(list2.HasSomething());
 		Assert.True(list3.HasSomething());
 	}

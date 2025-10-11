@@ -4,6 +4,7 @@
 // See the LICENSE file in the project root for details.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace XForm.Utilities.Validations;
 
@@ -12,25 +13,40 @@ public static class Extensions
 	#region - String -
 
 	/// <summary>
-	///  Validates that the given value is not null or empty.
+	/// Determines if the given string is not null.
 	/// </summary>
-	/// <param name="value"></param>
-	/// <param name="parameterName"></param>
+	/// <param name="guidValue"></param>
+	/// <returns></returns>
+	public static bool IsNotNull([NotNull] this string? guidValue)
+	{
+		if (guidValue == null)
+		{
+			guidValue ??= string.Empty; // To avoid warning CS8601: Possible null reference assignment.
+			return false;
+		}
+
+		return true;
+	}
+
+	/// <summary>
+	///  Validates that the given string is not null or empty.
+	/// </summary>
+	/// <param name="stringValue"></param>
 	/// <param name="considerEmptyIf"></param>
 	/// <returns></returns>
-	public static bool HasSomething(this string? value, string parameterName = "", string? considerEmptyIf = null)
+	public static bool HasSomething([NotNull] this string? stringValue, string? considerEmptyIf = null)
 	{
-		value ??= string.Empty;
+		stringValue ??= string.Empty; // To avoid warning CS8601: Possible null reference assignment.
 
-		string trimmed = value.Trim();
+		string trimmed = stringValue.Trim();
 
-		if (string.IsNullOrEmpty(value) == true
+		if (string.IsNullOrEmpty(stringValue) == true
 			|| string.IsNullOrWhiteSpace(trimmed) == true)
 		{
 			return false;
 		}
 		else if (considerEmptyIf != null
-					&& value.Trim().Equals(considerEmptyIf, StringComparison.InvariantCultureIgnoreCase))
+					&& stringValue.Trim().Equals(considerEmptyIf, StringComparison.InvariantCultureIgnoreCase))
 		{
 			return false;
 		}
@@ -69,11 +85,11 @@ public static class Extensions
 	/// </summary>
 	/// <param name="hexString"></param>
 	/// <returns></returns>
-	public static bool IsColorCode(this string hexString)
+	public static bool IsColorCode(this string hexStringOrColorName)
 	{
 		try
 		{
-			var color = System.Drawing.ColorTranslator.FromHtml(hexString);
+			var color = System.Drawing.ColorTranslator.FromHtml(hexStringOrColorName);
 			return true;
 		}
 		catch
@@ -84,50 +100,37 @@ public static class Extensions
 
 	#endregion - String -
 
-	#region - Generic -
+	#region - Guid -
 
 	/// <summary>
-	/// Validates that the given value is not null or default.
+	/// Determines if the given guid is not null.
 	/// </summary>
-	/// <typeparam name="T">The type of the value being validated.</typeparam>
-	/// <param name="val">The value being validated.</param>
-	/// <param name="nameOfParam">The name of the parameter being validated.</param>
-	/// <returns>True if the value is valid.</returns>
-	public static bool IsNotNullOrDefault<T>(this T? val, string nameOfParam, T? considerDefaultIf = null) where T : struct
+	/// <param name="guidValue"></param>
+	/// <returns></returns>
+	public static bool IsNotNull([NotNull] this Guid? guidValue)
 	{
-		if (val == null
-			|| EqualityComparer<T>.Default.Equals(val.Value, default))
+		if (guidValue == null)
 		{
-			return false;
-		}
-
-		if (val.Equals(considerDefaultIf) == true)
-		{
+			guidValue ??= Guid.Empty; // To avoid warning CS8601: Possible null reference assignment.
 			return false;
 		}
 
 		return true;
 	}
 
-	#endregion - Generic -
-
-	#region - Guid -
-
 	/// <summary>
 	/// Determines whether the specified GUID is not null or default.
 	/// </summary>
 	/// <param name="guid"></param>
-	/// <param name="nameOfParam"></param>
+	/// <param name="considerEmptyIf"></param>
 	/// <returns></returns>
-	public static bool IsNotNullOrDefault(this Guid? guid, string nameOfParam, bool considerDefaultIfEmpty = false)
+	public static bool HasSomething([NotNull] this Guid? guid, Guid? considerEmptyIf = null)
 	{
-		if (guid == null || guid == default(Guid))
+		if (guid == null
+			|| guid == default(Guid)
+			|| guid == considerEmptyIf)
 		{
-			return false;
-		}
-
-		if (considerDefaultIfEmpty && guid == Guid.Empty)
-		{
+			guid ??= Guid.Empty;
 			return false;
 		}
 
@@ -142,17 +145,20 @@ public static class Extensions
 	/// <returns></returns>
 	public static bool HasNothing(this Guid? guid, Guid? considerEmptyIf = null)
 	{
-		if (guid == null || guid == Guid.Empty)
+		if (guid == null 
+			|| guid == Guid.Empty)
 		{
 			return true;
 		}
-		if (considerEmptyIf.HasValue && guid == considerEmptyIf.Value)
+
+		if ((guid ?? Guid.Empty) == (considerEmptyIf ?? Guid.Empty))
 		{
 			return true;
 		}
 
 		return false;
 	}
+
 	#endregion - Guid -
 
 	#region - Numbers - 
@@ -163,10 +169,11 @@ public static class Extensions
 	/// <param name="intValue"></param>
 	/// <param name="nameOfParam"></param>
 	/// <returns></returns>
-	public static bool IsNotNull(this int? intValue, string nameOfParam)
+	public static bool IsNotNull([NotNull] this int? intValue)
 	{
 		if (intValue == null)
 		{
+			intValue ??= 0; // To avoid warning CS8601: Possible null reference assignment.
 			return false;
 		}
 
@@ -180,11 +187,12 @@ public static class Extensions
 	/// <param name="nameOfParam"></param>
 	/// <param name="considerDefaultIf"></param>
 	/// <returns></returns>
-	public static bool IsNotNullOrDefault(this int? intValue, string nameOfParam, int? considerDefaultIf = 0)
+	public static bool HasSomething([NotNull] this int? intValue, int? considerDefaultIf = 0)
 	{
 		if (intValue == null
-			|| EqualityComparer<int>.Default.Equals(intValue))
+			|| intValue == default(int))
 		{
+			intValue ??= 0; // To avoid warning CS8601: Possible null reference assignment.
 			return false;
 		}
 
@@ -202,10 +210,11 @@ public static class Extensions
 	/// <param name="decimalValue"></param>
 	/// <param name="nameOfParam"></param>
 	/// <returns></returns>
-	public static bool IsNotNull(this decimal? decimalValue, string nameOfParam)
+	public static bool IsNotNull(this decimal? decimalValue)
 	{
 		if (decimalValue == null)
 		{
+			decimalValue ??= 0; // To avoid warning CS8601: Possible null reference assignment.
 			return false;
 		}
 
@@ -219,11 +228,12 @@ public static class Extensions
 	/// <param name="nameOfParam"></param>
 	/// <param name="considerDefaultIf"></param>
 	/// <returns></returns>
-	public static bool IsNotNullOrDefault(this decimal? decimalValue, string nameOfParam, decimal? considerDefaultIf = 0)
+	public static bool HasSomething([NotNull] this decimal? decimalValue, decimal? considerDefaultIf = 0)
 	{
 		if (decimalValue == null
 			|| decimalValue == default)
 		{
+			decimalValue ??= 0; // To avoid warning CS8601: Possible null reference assignment.
 			return false;
 		}
 
@@ -241,10 +251,11 @@ public static class Extensions
 	/// <param name="doubleValue"></param>
 	/// <param name="nameOfParam"></param>
 	/// <returns></returns>
-	public static bool IsNotNull(this double? doubleValue, string nameOfParam)
+	public static bool IsNotNull([NotNull] this double? doubleValue)
 	{
 		if (doubleValue == null)
 		{
+			doubleValue ??= 0; // To avoid warning CS8601: Possible null reference assignment.
 			return false;
 		}
 
@@ -258,11 +269,12 @@ public static class Extensions
 	/// <param name="nameOfParam"></param>
 	/// <param name="considerDefaultIf"></param>
 	/// <returns></returns>
-	public static bool IsNotNullOrDefault(this double? doubleValue, string nameOfParam, double? considerDefaultIf = 0)
+	public static bool HasSomething([NotNull] this double? doubleValue, double? considerDefaultIf = 0)
 	{
 		if (doubleValue == null
 			|| doubleValue == default)
 		{
+			doubleValue ??= 0; // To avoid warning CS8601: Possible null reference assignment.
 			return false;
 		}
 
@@ -285,7 +297,7 @@ public static class Extensions
 	/// <typeparam name="TValue"></typeparam>
 	/// <param name="dictionary"></param>
 	/// <returns></returns>
-	public static bool HasNothing<TKey, TValue>(this Dictionary<TKey, TValue>? dictionary) where TKey : notnull // Add 'notnull' constraint to TKey to satisfy Dictionary<TKey, TValue> requirements
+	public static bool HasNothing<TKey, TValue>(this Dictionary<TKey, TValue>? dictionary) where TKey : notnull 
 	{
 		return dictionary == null || dictionary.Count == 0;
 	}
@@ -297,12 +309,11 @@ public static class Extensions
 	/// <typeparam name="TValue"></typeparam>
 	/// <param name="dictionary"></param>
 	/// <returns></returns>
-	public static bool HasSomething<TKey, TValue>(this Dictionary<TKey, TValue>? dictionary) where TKey : notnull // Add 'notnull' constraint to TKey to satisfy Dictionary<TKey, TValue> requirements
+	public static bool HasSomething<TKey, TValue>([NotNull] this Dictionary<TKey, TValue>? dictionary) where TKey : notnull 
 	{
 		if (dictionary == null)
 		{
-			// To avoid warning CS8601: Possible null reference assignment.
-			dictionary = new Dictionary<TKey, TValue>();
+			dictionary = new Dictionary<TKey, TValue>(); // To avoid warning CS8601: Possible null reference assignment.
 
 			return false;
 		}
@@ -323,8 +334,7 @@ public static class Extensions
 	{
 		if (boolean == null)
 		{
-			// To avoid warning CS8601: Possible null reference assignment.
-			boolean = false;
+			boolean = false; // To avoid warning CS8601: Possible null reference assignment.
 
 			return false;
 		}
@@ -333,6 +343,34 @@ public static class Extensions
 	}
 
 	#endregion - Boolean -
+
+	#region - Generic -
+
+	/// <summary>
+	/// Validates that the given value is not null or default.
+	/// </summary>
+	/// <typeparam name="T">The type of the value being validated.</typeparam>
+	/// <param name="val">The value being validated.</param>
+	/// <param name="nameOfParam">The name of the parameter being validated.</param>
+	/// <returns>True if the value is valid.</returns>
+	public static bool HasSomething<T>([NotNull] this T? val, T? considerDefaultIf = null) where T : struct
+	{
+		if (val == null
+			|| EqualityComparer<T>.Default.Equals(val.Value, default))
+		{
+			val = default(T); // To avoid warning CS8601: Possible null reference assignment.
+			return false;
+		}
+
+		if (val.Equals(considerDefaultIf) == true)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	#endregion - Generic -
 
 	#region - Enumberable -
 
@@ -357,10 +395,8 @@ public static class Extensions
 	{
 		if (list == null)
 		{
-			// To avoid warning CS8601: Possible null reference assignment.
-			list = new List<T>();
-
-			return true;
+			list = new List<T>(); // To avoid warning CS8601: Possible null reference assignment.
+			return false;
 		}
 
 		return list.Any() == true;

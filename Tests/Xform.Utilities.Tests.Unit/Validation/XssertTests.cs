@@ -79,6 +79,21 @@ public class XssertTests
 	}
 
 	[Fact]
+	public void IsNotNull_ShouldNotThrow_WhenGuidIsNotNull()
+	{
+		var obj = Guid.NewGuid;
+		Xssert.IsNotNull(obj, "param");
+	}
+
+	[Fact]
+	public void IsNotNull_ShouldThrow_WhenGuidIsNull()
+	{
+		Guid? obj = null;
+		Assert.Throws<ArgumentNullException>(() =>
+			Xssert.IsNotNull(obj, "param"));
+	}
+
+	[Fact]
 	public void IsNotNullOrEmpty_ShouldNotThrow_WhenCollectionHasItems()
 	{
 		var list = new List<int> { 1, 2, 3 };
