@@ -61,7 +61,7 @@ string replaced = input.RemoveSpecialCharacters("_");
 // replaced = "User__123.Name_"
 ```
 
----
+------------------------------------------------------------------------
 
 ### 2. `GetNonEmptyValuesAsList<T>()`
 
@@ -111,7 +111,7 @@ IEnumerable<bool> boolList = input.GetNonEmptyValuesAsList<bool>(';');
 // boolList = [true, false, true]
 ```
 
----
+------------------------------------------------------------------------
 
 ### 3. `ContainsString()`
 
@@ -201,7 +201,7 @@ DateTime utcTime = localTime.ToUtcIgnoreDst();
 Console.WriteLine(utcTime); // Output: Adjusted UTC time without DST consideration
 ```
 
----
+------------------------------------------------------------------------
 
 ### 2. `ToLocalIgnoreDst()`
 
@@ -237,7 +237,7 @@ DateTime localTime = utcTime.ToLocalIgnoreDst();
 Console.WriteLine(localTime); // Output: Local time adjusted by BaseUtcOffset
 ```
 
----
+------------------------------------------------------------------------
 
 ### 3. `ConvertToISO8601Format()`
 
@@ -268,7 +268,7 @@ string iso = date.ConvertToISO8601Format();
 Console.WriteLine(iso); // Output: "20251013T103045+0700" (example)
 ```
 
----
+------------------------------------------------------------------------
 
 ### 4. `ToDateTimeOffset(this DateTime dateTime, TimeZoneInfo timeZoneInfo)`
 
@@ -301,7 +301,7 @@ DateTimeOffset dto = date.ToDateTimeOffset(tz);
 Console.WriteLine(dto); // Output: 2025-10-13 09:00:00 -07:00
 ```
 
----
+------------------------------------------------------------------------
 
 ### 5. `ToDateTimeOffset(this DateTime dateTime, TimeSpan timeSpan)`
 
@@ -334,7 +334,7 @@ DateTimeOffset dto = date.ToDateTimeOffset(offset);
 Console.WriteLine(dto); // Output: 2025-10-13 09:00:00 -05:00
 ```
 
----
+------------------------------------------------------------------------
 
 
 
@@ -344,7 +344,7 @@ Console.WriteLine(dto); // Output: 2025-10-13 09:00:00 -05:00
 **Namespace:** `XForm.Utilities.Extensions`  
 **Assembly:** `XForm.Utilities`
 
----
+------------------------------------------------------------------------
 
 ## Overview
 
@@ -377,7 +377,7 @@ var dict = new Dictionary<string, int>
 int index = dict.GetIndexOfDictionaryKey("B"); // Returns 1
 ```
 
----
+------------------------------------------------------------------------
 
 ### 2. SafeAdd<TKey, TValue>
 
@@ -402,7 +402,7 @@ bool added = dict.SafeAdd("Y", 2);  // Returns true (new entry)
 bool updated = dict.SafeAdd("X", 5); // Returns false (value replaced)
 ```
 
----
+------------------------------------------------------------------------
 
 ### 3. SafeGet<TKey, TValue>
 
@@ -423,7 +423,7 @@ string name = dict.SafeGet("Name", "Unknown"); // Returns "Rohit"
 string email = dict.SafeGet("Email", "N/A");   // Returns "N/A"
 ```
 
----
+------------------------------------------------------------------------
 
 ### 4. SafeGet<TReturnValue> (for non-generic IDictionary)
 
@@ -448,7 +448,7 @@ int age = dict.SafeGet("Age", 0);       // Returns 25
 bool active = dict.SafeGet("Active", false); // Returns true
 ```
 
----
+------------------------------------------------------------------------
 
 ### 5. RenameKey<TKey, TValue>
 
@@ -471,7 +471,7 @@ dict.RenameKey("OldKey", "NewKey");
 // Now contains { "NewKey": "Value" }
 ```
 
----
+------------------------------------------------------------------------
 
 ## Summary Table
 
@@ -595,6 +595,87 @@ Charlie,42,Chicago
 
 
 
+
+# GenericExtensions Class
+
+**Namespace:** `XForm.Utilities.Extensions`  
+**Assembly:** `XForm.Utilities`  
+
+------------------------------------------------------------------------
+
+## Overview
+
+The `GenericExtensions` class provides a utility method to **convert any object** to a specified generic type `T`.  
+It supports conversions to enums, `bool`, `TimeSpan`, and `Guid`, in addition to standard primitive type conversions.
+
+------------------------------------------------------------------------
+
+## Example Usage
+
+### Example 1: Converting String to Integer
+
+```csharp
+object value = "42";
+int result = value.ConvertTo<int>();
+Console.WriteLine(result); // Output: 42
+```
+
+------------------------------------------------------------------------
+
+### Example 2: Converting String to Boolean
+
+```csharp
+object value = "true";
+bool result = value.ConvertTo<bool>();
+Console.WriteLine(result); // Output: True
+```
+
+------------------------------------------------------------------------
+
+### Example 3: Converting String to Enum
+
+```csharp
+public enum Colors { Red, Green, Blue }
+
+object value = "Green";
+Colors color = value.ConvertTo<Colors>();
+Console.WriteLine(color); // Output: Green
+```
+
+------------------------------------------------------------------------
+
+### Example 4: Converting String to Guid
+
+```csharp
+object value = "3f2504e0-4f89-11d3-9a0c-0305e82c3301";
+Guid guid = value.ConvertTo<Guid>();
+Console.WriteLine(guid); // Output: 3f2504e0-4f89-11d3-9a0c-0305e82c3301
+```
+
+------------------------------------------------------------------------
+
+### Example 5: Converting String to TimeSpan
+
+```csharp
+object value = "01:30:00";
+TimeSpan timeSpan = value.ConvertTo<TimeSpan>();
+Console.WriteLine(timeSpan); // Output: 01:30:00
+```
+
+------------------------------------------------------------------------
+
+## Exceptions
+
+| Exception Type | Condition |
+|----------------|------------|
+| `ArgumentException` | Thrown when a conversion is not possible or invalid. |
+
+
+
+
+
+
+
 # License
 
 MIT License. See the LICENSE file in the project root for details.
@@ -622,4 +703,3 @@ MIT License. See the LICENSE file in the project root for details.
 ## 1.0.0
 - Initial commit for the desired functionality in library.
 
-------------------------------------------------------------------------
