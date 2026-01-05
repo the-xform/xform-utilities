@@ -835,8 +835,9 @@ MIT License. See the LICENSE file in the project root for details.
 
 # Version History
 
-## Next
+## 2.1.0
 - Added readme and license file to the project.
+- Added SecurtyUtilities class for Windows-specific security operations.
 
 ## 2.0.0
 - Unified approach to IsNull and IsNotNull methods.

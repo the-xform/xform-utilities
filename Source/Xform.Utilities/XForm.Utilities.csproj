@@ -11,6 +11,7 @@
 		<Authors>Rohit Ahuja</Authors>
 		<Company>The XForm</Company>
 		<Description>Easy to use validation extension, assertions (Xssert) for various .NET types, scheduling and location utilities, JSON utilities, Security utilities that can help the developer focus on actual code without worrying to write validation code from scratch. </Description>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/the-xform/xform-utilities</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/the-xform/xform-utilities</RepositoryUrl>
@@ -20,5 +21,8 @@
 	  <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="9.0.9" />
 	  <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.15.0" />
 	  <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="Docs\README.md" Pack="true" PackagePath="\"/>
 	</ItemGroup>
 </Project>
