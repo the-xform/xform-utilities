@@ -7,10 +7,10 @@
 		<!-- Nuget Settings -->
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>XForm.Utilities</PackageId>
-		<Version>2.0.0</Version>
+		<Version>2.0.1</Version>
 		<Authors>Rohit Ahuja</Authors>
 		<Company>The XForm</Company>
-		<Description>Easy to use validation extension, assertions (Xssert) for various .NET types, scheduling and location utilities, JSON utilities, that can help the developer focus on actual code without worrying to write validation code from scratch. </Description>
+		<Description>Easy to use validation extension, assertions (Xssert) for various .NET types, scheduling and location utilities, JSON utilities, Security utilities that can help the developer focus on actual code without worrying to write validation code from scratch. </Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/the-xform/xform-utilities</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/the-xform/xform-utilities</RepositoryUrl>
@@ -18,5 +18,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="9.0.9" />
+	  <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.15.0" />
+	  <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.1" />
 	</ItemGroup>
 </Project>
