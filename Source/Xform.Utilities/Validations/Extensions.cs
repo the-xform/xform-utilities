@@ -4,7 +4,6 @@
 // See the LICENSE file in the project root for details.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 
 namespace XForm.Utilities.Validations;
 
@@ -38,7 +37,7 @@ public static class Extensions
 	{
 		stringValue ??= string.Empty; // To avoid warning CS8601: Possible null reference assignment.
 
-		string trimmed = stringValue.Trim();
+		var trimmed = stringValue.Trim();
 
 		if (string.IsNullOrEmpty(stringValue) == true
 			|| string.IsNullOrWhiteSpace(trimmed) == true)
@@ -64,7 +63,7 @@ public static class Extensions
 	{
 		value ??= string.Empty;
 
-		string trimmed = value.Trim();
+		var trimmed = value.Trim();
 
 		if (string.IsNullOrEmpty(value)
 			|| string.IsNullOrWhiteSpace(value))
@@ -403,5 +402,4 @@ public static class Extensions
 	}
 
 	#endregion - Enumberable -
-
 }
