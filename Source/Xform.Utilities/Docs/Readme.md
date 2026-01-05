@@ -674,6 +674,154 @@ Console.WriteLine(timeSpan); // Output: 01:30:00
 
 
 
+# SecurityUtilities Class
+
+**Namespace:** `XForm.Utilities`\
+**Platform:** Windows only (`[SupportedOSPlatform("Windows")]`)\
+**Assembly:** `XForm.Utilities`  
+
+## Overview
+
+`SecurityUtilities` is a collection of static helper methods providing
+common security-related functionality for Windows-based .NET
+applications.\
+It includes:
+
+-   SecureString ↔ string conversion
+-   Encryption and decryption using Windows DPAPI
+-   HMAC-SHA256 signature generation
+-   RSA key management using the Windows Machine Key Store
+
+> ⚠️ This class relies on Windows-specific cryptographic APIs and is not
+> cross-platform.
+
+------------------------------------------------------------------------
+
+## Secure / Unsecure String Conversion
+
+### `MakeSecureString(string unsecureString)`
+
+Converts a plain-text string into a read-only `SecureString`.
+
+**Parameters** - `unsecureString` -- Plain-text input
+
+**Returns** - `SecureString`
+
+------------------------------------------------------------------------
+
+### `MakeUnsecureString(SecureString secureString)`
+
+Converts a `SecureString` back into a plain-text string.
+
+**Parameters** - `secureString` -- Secure string instance
+
+**Returns** - `string`
+
+**Notes** - Uses unmanaged memory via `Marshal.SecureStringToBSTR` -
+Memory is zeroed after use
+
+------------------------------------------------------------------------
+
+## Encryption / Decryption (DPAPI)
+
+### `EncryptString(string plainTextString, DataProtectionScope scope = LocalMachine)`
+
+Encrypts a string using the Windows Data Protection API.
+
+**Returns** - Base64-encoded encrypted string
+
+------------------------------------------------------------------------
+
+### `EncryptString(SecureString secureString, DataProtectionScope scope = LocalMachine)`
+
+Encrypts a `SecureString` using DPAPI.
+
+**Details** - Uses Unicode encoding - Includes additional entropy for
+protection - Output is Base64-encoded
+
+------------------------------------------------------------------------
+
+### `DecryptString(string encryptedString, DataProtectionScope scope = LocalMachine)`
+
+Decrypts a DPAPI-encrypted string.
+
+**Returns** - `SecureString` - Empty `SecureString` on failure
+
+------------------------------------------------------------------------
+
+## HMAC SHA256
+
+### `GenerateHmacSignature(string content, string secret, bool isTruncated = true, bool isBase64UrlEncoded = false)`
+
+Generates an HMAC-SHA256 signature.
+
+**Parameters** - `content` -- Message content - `secret` -- Shared
+secret - `isTruncated` -- Truncates to 128-bit if true -
+`isBase64UrlEncoded` -- URL-safe Base64 encoding
+
+------------------------------------------------------------------------
+
+### `GenerateHmacSignature(byte[] content, byte[] secret, bool isTruncated = true, bool isBase64UrlEncoded = false)`
+
+Low-level overload for byte arrays.
+
+**Returns** - Signature as Base64 or Base64URL string
+
+------------------------------------------------------------------------
+
+## RSA Keys (Machine Key Store)
+
+### `IsRsaNamedKeyPresent(string name)`
+
+Checks whether an RSA key exists in the machine key store.
+
+**Returns** - `true` if present, otherwise `false`
+
+------------------------------------------------------------------------
+
+### `GetRsaNamedKey(string name)`
+
+Retrieves an RSA key from the machine key store.
+
+**Returns** - `RSACryptoServiceProvider` (caller must dispose)
+
+**Throws** - `SecurityException` if key is missing
+
+------------------------------------------------------------------------
+
+### `InstallRsaNamedKey(string name, string keyPairXml)`
+
+Installs a non-exportable RSA key pair into the machine key store.
+
+**Requirements** - XML must contain both public and private keys
+
+------------------------------------------------------------------------
+
+### `RemoveRsaNamedKey(string name)`
+
+Removes an RSA key from the machine key store.
+
+------------------------------------------------------------------------
+
+## Security Notes
+
+-   Uses Windows DPAPI for encryption
+-   RSA keys are non-exportable
+-   Suitable for secrets, tokens, and key management
+-   Not recommended for cross-platform environments
+
+------------------------------------------------------------------------
+
+## Dependencies
+
+-   `System.Security.Cryptography`
+-   `Microsoft.IdentityModel.Tokens`
+-   `XForm.Utilities.Validations`
+
+------------------------------------------------------------------------
+
+
+
 
 
 # License
